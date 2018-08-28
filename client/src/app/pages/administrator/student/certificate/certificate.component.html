@@ -1,0 +1,56 @@
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="dashboard/student">Painel</a>
+    </li>
+    <li class="breadcrumb-item active">Certificado</li>
+  </ol>
+  <div *ngIf="success" class="alert alert-success" role="alert">
+    {{success}}
+  </div>
+  <div *ngIf="errors" class="alert alert-danger" role="alert">
+    {{errors}}
+  </div>
+  <div class="card mb-3">
+      <object *ngIf="fileType == 'pdf'" [data]='this.safeUrl' width="100%" height="800px" type='application/pdf'>
+        <p>Ocorreu algum erro para mostrar o PDF</p>
+        <a href="{{certificate.file_url}}" target="_blank">Clique aqui</a>
+      </object>
+  
+      <img *ngIf="fileType == 'img'" class="card-img-top img-fluid w-100" src="{{certificate.file_url}}"  alt="">
+      <div class="card-body">
+          <div class="row">
+            <div class="col-sm-12">
+              <dl>
+                <dt>Evento: </dt>
+                <dd>{{certificate.event}}</dd>            
+                <dt>Instituição: </dt>
+                <dd>{{certificate.institution}}</dd>  
+                <dt>Data do evento: </dt>
+                <dd>{{certificate.date_event | date: 'dd/MM/yyyy'}}</dd>      
+                <dt>Carga horaria: </dt>
+                <dd>{{certificate.ch}}</dd>
+                <dt>Status: </dt>
+                <dd *ngIf="certificate.status <= 0">Pendente</dd>
+                <dd *ngIf="certificate.status == 1" ><span style="color: green;">Aprovado</span></dd>
+                <dd *ngIf="certificate.status == 2"><span style="color: red;">Reprovado</span></dd>
+                <dt *ngIf="certificate.status == 1 || certificate.status == 2">Obervações do administrador: </dt>
+                <dd  *ngIf="certificate.status == 1 || certificate.status == 2">{{certificate.description}}</dd>
+            </dl>
+            <div  *ngIf="certificate.status == 1">
+                Total de horas acumuladas com este certificado: <strong>{{certificate.accumulated_ch}}</strong>
+                <br>
+                <span *ngIf="certificate.full == 1" style="font-size: 13px; color: red;">
+                  Você já atingiu o número máximo de horas acumuladas para este tipo de atividade.
+                </span>
+            </div>
+            <!--
+              <div *ngIf="certificate.status <= 0 ||certificate.status == 2">
+                <button type="button" (click)="openModal(update, true)" class="btn btn-info">Alterar</button>
+                <button *ngIf="certificate.status == 2" (click)="openModal(remove)" type="button" class="btn btn-danger">Excluir</button>
+              </div>
+            -->
+            </div>
+          </div>
+      </div>
+      <div class="card-footer small text-muted">Criado em {{certificate.created_at | date: 'dd/MM/yyyy'}}</div>
+    </div>

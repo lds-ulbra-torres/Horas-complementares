@@ -1,0 +1,88 @@
+<!-- Breadcrumbs-->
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">
+    <a href="#">Painel</a>
+  </li>
+  <li class="breadcrumb-item active"></li>
+</ol>
+<div *ngIf="success" class="alert alert-success" role="alert">
+  {{success}}
+</div>
+<div *ngIf="errors" class="alert alert-danger" role="alert">
+  {{errors}}
+</div>
+<div class="card mb-3">
+  <div class="card-header">
+    <i class="fa fa-bell-o"></i> Certificados pendentes</div>
+  <div class="list-group list-group-flush small">
+    <a  (click)="openModal(certificateModal, true, certificate.certificate_id, certificate.student_id)" *ngFor="let certificate of certificates" style="cursor: pointer;" title="Clique para avaliar" class="list-group-item list-group-item-action">
+      <div class="media">
+        <div class="media-body">
+          <strong>{{certificate.name}}</strong> Enviou um ceriticado
+          <div class="text-muted smaller">{{certificate.created_at | date: 'dd/MM/yyyy'}}</div>
+        </div>
+      </div>
+    </a>
+  </div>
+  <div class="card-footer small text-muted" *ngIf="certificates_count < 1">Nenhum certificado pendente</div>
+  <div class="card-footer small text-muted" *ngIf="certificates_count == 1">{{certificates_count}} certificado pendente</div>
+  <div class="card-footer small text-muted" *ngIf="certificates_count > 1">{{certificates_count}} certificados pendentes</div>
+</div>
+
+<ng-template #certificateModal>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">Avaliar certificado</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div *ngIf="success_modal" class="alert alert-success" role="alert">
+        {{success_modal}}
+      </div>
+      <div *ngIf="errors_modal" class="alert alert-danger" role="alert">
+        {{errors_modal}}
+      </div>
+      <form>
+          <object *ngIf="fileType == 'pdf'" [data]='this.safeUrl' width="100%" height="500px" type='application/pdf'>
+            <p>Ocorreu algum erro para mostrar o PDF</p>
+            <a href="{{certificate.file_url}}" target="_blank">Clique aqui</a>
+          </object>
+      
+          <img *ngIf="fileType == 'img'" class="card-img-top img-fluid w-100" src="{{certificate.file_url}}"  alt="">
+          <span *ngIf="!fileType || fileType == ''">Imagem não encontrada</span>
+        <div class="form-group">
+          <label for="event">Evento</label>
+          <input type="text" class="form-control" id="event" name="event" [(ngModel)]="certificate.event">
+        </div>
+        <div class="form-row" style="margin-bottom: 1rem;">
+          <div class="col-md-8">
+            <label for="institution">Instituição</label>
+            <input type="text" class="form-control" id="institution" name="institution" [(ngModel)]="certificate.institution">
+          </div>
+          <div class="col-md-4">
+            <label for="rule">Classificação</label>
+            <select id="rule" class="form-control" name="rule" [(ngModel)]="certificate.rule">
+              <option *ngFor="let rule of rules" [value]="rule.id">{{rule.classification}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row" style="margin-bottom: 1rem;">
+          <div class="col-md-6">
+            <label for="date_event">Data do evento</label>
+            <input class="form-control" id="date_event" type="date" name="date_event" [(ngModel)]="certificate.date_event">
+          </div>
+          <div class="col-md-6">
+            <label for="ch">Carga horaria (H)</label>
+            <input class="form-control" id="ch" type="number" name="ch" [(ngModel)]="certificate.ch">
+          </div>
+        </div>
+        <div class="form-group">
+            <label for="description">Observações</label>
+            <textarea class="form-control" id="description" name="description" [(ngModel)]="certificate.description"></textarea>
+          </div>
+        <button type="button" (click)="checkCertificate(1)" class="btn btn-success">Aprovar</button>
+        <button type="button" (click)="checkCertificate(2)" class="btn btn-danger">Reprovar</button>
+      </form>
+    </div>
+  </ng-template>

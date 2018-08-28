@@ -1,0 +1,74 @@
+<div *ngIf="success" class="alert alert-success" role="alert">
+    {{success}}
+</div>
+<div *ngIf="errors" class="alert alert-danger" role="alert">
+    {{errors}}
+</div>
+<!-- Navigation-->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
+    <a class="navbar-brand" style="cursor: pointer; color: white;" (click)="home()">HS STADS</a>
+    <button (click)="toggleMenu()" class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+        aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
+            <li class="nav-item" data-toggle="tooltip" data-placement="right" (click)="goTo('alunos')" title="Alunos">
+                <a class="nav-link">
+                    <i class="fa fa-graduation-cap"></i>
+                    <span class="nav-link-text">Alunos</span>
+                </a>
+            </li>
+            <li class="nav-item" data-toggle="tooltip" data-placement="right" (click)="goTo('regras')" title="Regras">
+                <a class="nav-link">
+                    <i class="fa fa-gavel"></i>
+                    <span class="nav-link-text">Regras</span>
+                </a>
+            </li>
+            <li class="nav-item" data-toggle="tooltip" data-placement="right" (click)="goTo('grupos')" title="Regras">
+                <a class="nav-link">
+                    <i class="fa fa-object-group"></i>
+                    <span class="nav-link-text">Grupos de atividade</span>
+                </a>
+            </li>
+            <li class="nav-item" data-toggle="tooltip" data-placement="right" (click)="goTo('ata')" title="Ata">
+                <a class="nav-link">
+                    <i class="fa fa-book"></i>
+                    <span class="nav-link-text">Ata</span>
+                </a>
+            </li>
+            <li class="nav-item" data-toggle="tooltip" data-placement="right" (click)="goTo('configuracoes')" title="Configurações">
+                <a class="nav-link">
+                    <i class="fa fa-cog"></i>
+                    <span class="nav-link-text">Configurações</span>
+                </a>
+            </li>
+        </ul>
+        <ul class="navbar-nav sidenav-toggler">
+            <li class="nav-item">
+                <a class="nav-link text-center" id="sidenavToggler">
+                    <i class="fa fa-fw fa-angle-left"></i>
+                </a>
+            </li>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" style="color: white;">
+                    Olá {{user.name}}
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="modal" (click)="logout()">
+                    <i class="fa fa-fw fa-sign-out"></i>Sair</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="content-wrapper">
+    <div class="container-fluid">
+        <router-outlet></router-outlet>
+    </div>
+    <!-- /.container-fluid-->
+    <!-- /.content-wrapper-->
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js"></script>

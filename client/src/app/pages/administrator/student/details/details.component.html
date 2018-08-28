@@ -1,0 +1,121 @@
+<!-- Breadcrumbs-->
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">
+    <a href="#">Painel</a>
+  </li>
+  <li class="breadcrumb-item">
+    <a href="#">Alunos</a>
+  </li>
+  <li class="breadcrumb-item active">{{student.name}}</li>
+</ol>
+<table class="table table-bordered dataTable" id="dataTable" width="100%" cellspacing="0" role="grid" aria-describedby="dataTable_info"
+style="width: 100%;">
+<thead>
+  <tr role="row">
+    <th class="sorting_asc" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-sort="ascending"
+      aria-label="Name: activate to sort column descending" style="width: 261px;">Aluno</th>
+    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending"
+      style="width: 394px;">CGU</th>
+    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending"
+      style="width: 194px;">Matricula</th>
+      <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending"
+      style="width: 100px;">Horas acumuladas</th>
+    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending"
+      style="width: 100px;">E-mail</th>
+  </tr>
+</thead>
+<tbody>
+  <tr role="row" class="odd">
+    <td class="sorting_1">{{student.name}}</td>
+    <td>{{student.cgu}}</td>
+    <td>{{student.matricula}}</td>
+    <th>{{student.accumulated_hours}}</th>
+    <td>{{student.email}}</td> 
+  </tr>
+</tbody>
+</table>
+<div class="card mb-3">
+    <div class="card-header">
+      <i class="fa fa-certificate"></i> Certificados</div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <div id="dataTable_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
+          <div class="row">
+            <div class="col-sm-12 col-md-2">
+              <!--
+              <div class="dataTables_length" id="dataTable_length">
+                  <select  style="margin-bottom: 1em;" name="dataTable_length" aria-controls="dataTable" class="form-control form-control-sm">
+                    <option value="10">Todos</option>
+                    <option value="25">Pendentes</option>
+                    <option value="50">Aprovados</option>
+                    <option value="50">Reprovados</option>
+                  </select>
+              </div>
+            -->
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <table class="table table-bordered dataTable" id="dataTable" width="100%" cellspacing="0" role="grid" aria-describedby="dataTable_info"
+                style="width: 100%;">
+                <thead>
+                  <tr role="row">
+                    <th class="sorting_asc" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-sort="ascending"
+                      aria-label="Name: activate to sort column descending" style="width: 261px;">Evento</th>
+                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending"
+                      style="width: 394px;">Instituição</th>
+                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending"
+                      style="width: 194px;">Data do evento</th>
+                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending"
+                      style="width: 100px;">CH</th>
+                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending"
+                      style="width: 189px;">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr role="row" class="odd" style="cursor: pointer;" *ngFor="let certificate of certificates" (click)="toCertificate(student.id, certificate.id)">
+                    <td class="sorting_1">{{certificate.event}}</td>
+                    <td>{{certificate.institution}}</td>
+                    <td>{{certificate.date_event | date: 'dd/MM/yyyy'}}</td>
+                    <td>{{certificate.ch}}</td>
+
+                    <td *ngIf="certificate.status <= 0">Pendente</td>
+                    <td *ngIf="certificate.status == 1">Aprovado</td>
+                    <td *ngIf="certificate.status == 2">Reprovado</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <!--
+          <div class="row">
+            <div class="col-sm-12 col-md-7">
+              <div class="dataTables_paginate paging_simple_numbers" id="dataTable_paginate">
+                <ul class="pagination">
+                  <li class="paginate_button page-item previous disabled" id="dataTable_previous">
+                    <a href="#" aria-controls="dataTable" data-dt-idx="0" tabindex="0" class="page-link">Anterior</a>
+                  </li>
+                  <li class="paginate_button page-item active">
+                    <a href="#" aria-controls="dataTable" data-dt-idx="1" tabindex="0" class="page-link">1</a>
+                  </li>
+                  <li class="paginate_button page-item ">
+                    <a href="#" aria-controls="dataTable" data-dt-idx="2" tabindex="0" class="page-link">2</a>
+                  </li>
+                  <li class="paginate_button page-item ">
+                    <a href="#" aria-controls="dataTable" data-dt-idx="3" tabindex="0" class="page-link">3</a>
+                  </li>
+                  <li class="paginate_button page-item next" id="dataTable_next">
+                    <a href="#" aria-controls="dataTable" data-dt-idx="7" tabindex="0" class="page-link">Próxima</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        -->
+        </div>
+      </div>
+    </div>
+    <div class="card-footer small text-muted" *ngIf="certificates_count < 1">Nenhum certificado encontrado</div>
+    <div class="card-footer small text-muted" *ngIf="certificates_count == 1">{{certificates_count}} certificado cadastrado</div>
+    <div class="card-footer small text-muted" *ngIf="certificates_count > 1">{{certificates_count}} certificados cadastrados</div>
+  </div>

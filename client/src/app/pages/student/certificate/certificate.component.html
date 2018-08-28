@@ -1,0 +1,126 @@
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">
+    <a href="dashboard/student">Painel</a>
+  </li>
+  <li class="breadcrumb-item active">Certificado</li>
+</ol>
+<div *ngIf="success" class="alert alert-success" role="alert">
+  {{success}}
+</div>
+<div *ngIf="errors" class="alert alert-danger" role="alert">
+  {{errors}}
+</div>
+<div class="card mb-3">
+  
+    <object *ngIf="fileType == 'pdf'" [data]='this.safeUrl' width="100%" height="800px" type='application/pdf'>
+      <p>Ocorreu algum erro para mostrar o PDF</p>
+      <a href="{{certificate.file_url}}" target="_blank">Clique aqui</a>
+    </object>
+
+    <img *ngIf="fileType == 'img'" class="card-img-top img-fluid w-100" src="{{certificate.file_url}}"  alt="">
+    <div class="card-body">
+        <div class="row">
+          <div class="col-sm-12">
+            <dl>
+              <dt>Evento: </dt>
+              <dd>{{certificate.event}}</dd>            
+              <dt>Instituição: </dt>
+              <dd>{{certificate.institution}}</dd>  
+              <dt>Data do evento: </dt>
+              <dd>{{certificate.date_event | date: 'dd/MM/yyyy'}}</dd>      
+              <dt>Carga horaria: </dt>
+              <dd>{{certificate.ch}}</dd>
+              <dt>Status: </dt>
+              <dd *ngIf="certificate.status <= 0">Pendente</dd>
+              <dd *ngIf="certificate.status == 1" ><span style="color: green;">Aprovado</span> por {{certificate.name}}</dd>
+              <dd *ngIf="certificate.status == 2"><span style="color: red;">Reprovado</span> por {{certificate.name}}</dd>
+              <dt *ngIf="certificate.status == 1 || certificate.status == 2">Obervações do administrador: </dt>
+              <dd  *ngIf="certificate.status == 1 || certificate.status == 2">{{certificate.description}}</dd>
+          </dl>
+          <div  *ngIf="certificate.status == 1">
+              Total de horas acumuladas com este certificado: <strong>{{certificate.accumulated_ch}}</strong>
+              <br>
+              <span *ngIf="certificate.full == 1" style="font-size: 13px; color: red;">
+                Você já atingiu o número máximo de horas acumuladas para este tipo de atividade.
+              </span>
+          </div>
+            <div *ngIf="certificate.status <= 0 ||certificate.status == 2">
+              <button type="button" (click)="openModal(update, true)" class="btn btn-info">Alterar</button>
+              <button *ngIf="certificate.status == 2" (click)="openModal(remove)" type="button" class="btn btn-danger">Excluir</button>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="card-footer small text-muted">Criado em {{certificate.created_at | date: 'dd/MM/yyyy'}}</div>
+  </div>
+
+  <ng-template #update>
+    <div *ngIf="certificate.status <= 0 ||certificate.status == 2">
+      <div class="modal-header">
+        <h4 class="modal-title pull-left">Alterar certificado</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="success_modal" class="alert alert-success" role="alert">
+          {{success_modal}}
+        </div>
+        <div *ngIf="errors_modal" class="alert alert-danger" role="alert">
+          {{errors_modal}}
+        </div>
+        <form [formGroup]="form" (ngSubmit)="updateCertificate()" enctype="multipart/form-data">
+          <div class="form-group">
+            <label for="exampleInputFile">Arquivo</label>
+            <input type="file" class="form-control-file" id="certificate_file" (change)="onFileChange($event)" #fileInputUpdate>
+            <small id="fileHelp" class="form-text text-muted">Apenas arquivos de imagens ou pdf</small>
+            <button type="button" (click)="clearFile()" class="btn btn-secondary btn-sm">Limpar campo de arquivo</button>
+          </div>
+          <div class="form-group">
+            <label for="event">Evento</label>
+            <input type="text" class="form-control" id="event" name="event" formControlName="event">
+          </div>
+          <div class="form-group">
+            <label for="institution">Instituição</label>
+            <input type="text" class="form-control" id="institution" name="institution" formControlName="institution">
+          </div>
+          <div class="form-row" style="margin-bottom: 1rem;">
+            <div class="col-md-6">
+              <label for="date_event">Data do evento</label>
+              <input class="form-control" id="date_event" type="date" name="date_event" formControlName="date_event">
+            </div>
+            <div class="col-md-6">
+              <label for="ch">Carga horaria</label>
+              <input class="form-control" id="ch" type="time" name="ch" formControlName="ch">
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Enviar</button>
+        </form>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template #remove>
+    <div  *ngIf="certificate.status == 2"> 
+      <div class="modal-header">
+        <h4 class="modal-title pull-left">Remover Certificado</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="success_modal" class="alert alert-success" role="alert">
+          {{success_modal}}
+        </div>
+        <div *ngIf="errors_modal" class="alert alert-danger" role="alert">
+          {{errors_modal}}
+        </div>
+        <form (ngSubmit)="removeCertificate()">
+          <p>
+            Realmente deseja remover este certificado?
+          </p>
+          <button type="submit" class="btn btn-danger">Remover</button>
+        </form>
+      </div>
+    </div>
+  </ng-template>

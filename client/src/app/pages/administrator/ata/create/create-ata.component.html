@@ -1,0 +1,135 @@
+<!-- Breadcrumbs-->
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">
+    <a href="#">Painel</a>
+  </li>
+  <li class="breadcrumb-item">
+    <a href="#">Ata</a>
+  </li>
+  <li class="breadcrumb-item active">Cadastrar</li>
+</ol>
+<div *ngIf="success" class="alert alert-success" role="alert">
+  {{success}}
+</div>
+<div *ngIf="errors" class="alert alert-danger" role="alert">
+  {{errors}}
+</div>
+<div class="card mb-3">
+  <div class="card-header">
+    <i class="fa fa-book"></i>
+  </div>
+  <div class="card-body">
+    <form (ngSubmit)="createAta()">
+      <div class="form-row" style="margin-bottom: 1rem;">
+        <div class="col-md-6">
+          <label for="year">Ano</label>
+          <input class="form-control" id="year" type="number" name="year" [(ngModel)]="ata.year">
+        </div>
+        <div class="col-md-6">
+          <label for="semester">Semestre</label>
+          <input class="form-control" id="semester" type="number" name="semester" [(ngModel)]="ata.semester">
+        </div>
+      </div>
+      <div>
+        <span>Alunos selecionados:</span>
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Matricula</th>
+                <th>Horas acumuladas</th>
+                <th>Status</th>
+                <td></td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="cursor: pointer;" *ngFor="let s of students_selected">
+                <td>{{s.name}}</td>
+                <td>{{s.matricula}}</td>
+                <td>{{s.accumulated_hours}}</td>
+                <td>{{s.status}}</td>
+                <td>
+                  <span (click)="rollBackStudent(s.id, s.name, s.matricula, s.accumulated_hours)" title="Remover">
+                    <i class="fa fa-trash"></i>
+                  </span>
+                  <span (click)="openModal(editStudent, s.id, s.name, s.matricula, s.accumulated_hours, s.status)" title="Editar">
+                    <i class="fa fa-edit"></i>
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div>
+        <span>Selecione os alunos:</span>
+        <div>
+          <form (ngSubmit)="searchStudent()">
+            <div class="form-row" style="margin-bottom: 1rem;">
+              <div class="col-md-2">
+                <label for="matricula">Matrícula/Nome</label>
+                <input class="form-control" id="matricula" type="text" name="ma_cgu_search" [(ngModel)]="ma_cgu_search">
+              </div>
+              <div class="col-md-2">
+                  <label for="cgu">Horas acumuladas</label>
+                  <input class="form-control" id="cgu" type="text" name="hours_search" [(ngModel)]="hours_search">
+                </div>
+              <div class="col-sm-2">
+                  <button style="margin-top: 32px;" type="submit" (click)="changeStudnet()" class="btn btn-primary">Buscar</button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Matricula</th>
+                <th>Horas acumuladas</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="cursor: pointer;" (click)="getStudent(s.id, s.name, s.matricula, s.accumulated_hours)" *ngFor="let s of students">
+                <td>{{s.name}}</td>
+                <td>{{s.matricula}}</td>
+                <td>{{s.accumulated_hours}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Cadastrar</button>
+    </form>
+  </div>
+</div>
+
+<ng-template #editStudent>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Alterar</h4>
+  </div>
+  <div class="modal-body">
+    <form (ngSubmit)="register()">
+      <div class="form-group">
+        <label for="name">Nome</label>
+        <input type="text" class="form-control" id="name" name="name" [(ngModel)]="student.name">
+      </div>
+      <div class="form-row" style="margin-bottom: 1rem;">
+        <div class="col-md-4">
+          <label for="cgu">Horas acumuladas</label>
+          <input class="form-control" id="cgu" type="text" name="accumulated_hours" [(ngModel)]="student.accumulated_hours">
+        </div>
+        <div class="col-md-4">
+          <label for="matricula">Matrícula</label>
+          <input class="form-control" id="matricula" type="text" name="matricula" [(ngModel)]="student.matricula">
+        </div>
+        <div class="col-md-4">
+            <label for="matricula">Status</label>
+            <input class="form-control" id="matricula" type="text" name="status" [(ngModel)]="student.status">
+          </div>
+      </div>
+      <button type="submit" (click)="changeStudnet()" class="btn btn-primary">Alterar</button>
+    </form>
+  </div>
+</ng-template>

@@ -1,0 +1,127 @@
+<!-- Breadcrumbs-->
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">
+    <a href="#">Painel</a>
+  </li>
+  <li class="breadcrumb-item active">Configurações</li>
+</ol>
+<div *ngIf="success" class="alert alert-success" role="alert">
+  {{success}}
+</div>
+<div *ngIf="errors" class="alert alert-danger" role="alert">
+  {{errors}}
+</div>
+<div class="card-columns">
+  <div class="card mb-3">
+    <div class="card-header">
+      <i class="fa fa-plus-square"></i> Cadastro de administrador </div>
+    <div class="card-body">
+      <form (ngSubmit)="createAdmin()">
+        <div class="form-group">
+          <label for="exampleInputEmail1">E-mail</label>
+          <input type="email" class="form-control" id="exampleInputEmail1" name="email" [(ngModel)]="admin.email" aria-describedby="emailHelp">
+          <small id="emailHelp" class="form-text text-muted">Será enviado um link para o e-mail digitado para completar o cadastro (Apenas se a opção abaixo estiver desativada)</small>
+        </div>
+        <div class="form-check">
+          <label class="form-check-label">
+            <input type="checkbox" name="google" [(ngModel)]="admin.google" class="form-check-input"> E-mail do Google?
+          </label>
+        </div>
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary">Enviar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="card mb-3">
+    <div class="card-header">
+      <i class="fa fa-envelope-square"></i> E-mails permitidos (Google) </div>
+    <div class="card-body">
+        <div style="margin-bottom: 15px;">
+            <button (click)="openModal(createEmail)" type="button" class="btn btn-primary">Cadastrar E-mail</button>
+        </div>
+      <div class="table-responsive">
+        <div id="dataTable_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
+          <div class="row">
+            <div class="col-sm-12 col-md-2">
+              <div class="dataTables_length" id="dataTable_length">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <table class="table table-bordered dataTable" id="dataTable" width="100%" cellspacing="0" role="grid" aria-describedby="dataTable_info"
+                style="width: 100%;">
+                <thead>
+                  <tr role="row">
+                    <th class="sorting_asc" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending"
+                      style="width: 261px;">E-mail</th>
+                    <th class="sorting_asc" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending"
+                      style="width: 261px;">Ação</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr role="row" *ngFor="let email of emails">
+                    <td class="sorting_1">{{email.email}}</td>
+                    <td>
+                      <span (click)="openModal(removeEmail, false, email.id, email.email)" style="font-size: 20px; cursor:pointer; text-align:center;" title="Excluir">
+                        <i class="fa fa-trash"></i>
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #createEmail>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">Cadastrar E-mail</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div *ngIf="success_modal" class="alert alert-success" role="alert">
+        {{success_modal}}
+      </div>
+      <div *ngIf="errors_modal" class="alert alert-danger" role="alert">
+        {{errors_modal}}
+      </div>
+      <form (ngSubmit)="createEmailModel()">
+        <div class="form-group">
+          <label for="mail_model">Modelo de e-mail</label>
+          <input type="text" class="form-control" id="mail_model" name="email" [(ngModel)]="email.email">
+        </div>
+        <button type="submit" class="btn btn-primary">Enviar</button>
+      </form>
+    </div>
+  </ng-template>
+
+<ng-template #removeEmail>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">Remover E-mail</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div *ngIf="success_modal" class="alert alert-success" role="alert">
+        {{success_modal}}
+      </div>
+      <div *ngIf="errors_modal" class="alert alert-danger" role="alert">
+        {{errors_modal}}
+      </div>
+      <form (ngSubmit)="removeEmailModel()">
+        <p>
+          Realmente deseja remover o modelo de e-mail {{modelName}}?
+        </p>
+        <button type="submit" class="btn btn-danger">Remover</button>
+      </form>
+    </div>
+  </ng-template>

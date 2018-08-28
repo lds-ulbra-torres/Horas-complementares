@@ -1,0 +1,152 @@
+<!-- Breadcrumbs-->
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">
+    <a href="#">Painel</a>
+  </li>
+  <li class="breadcrumb-item active">Regras</li>
+</ol>
+<div *ngIf="success" class="alert alert-success" role="alert">
+  {{success}}
+</div>
+<div *ngIf="errors" class="alert alert-danger" role="alert">
+  {{errors}}
+</div>
+<div class="card mb-3">
+    <div class="card-header">
+        <i class="fa fa-gavel"></i> </div>
+    <div class="card-body">
+      <div style="margin-bottom: 15px;">
+          <button (click)="openModal(create, null, true)" type="button" class="btn btn-primary">Cadastrar Regra</button>
+      </div>
+      <div class="table-responsive">
+        <div id="dataTable_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
+          <div class="row">
+            <div class="col-sm-12 col-md-2">
+              <div class="dataTables_length" id="dataTable_length">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <table class="table table-bordered dataTable" id="dataTable" width="100%" cellspacing="0" role="grid" aria-describedby="dataTable_info"
+                style="width: 100%;">
+                <thead>
+                  <tr role="row">
+                    <th class="sorting_asc" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-sort="ascending"
+                      aria-label="Name: activate to sort column descending" style="width: 261px;">Atividade</th>
+                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending"
+                      style="width: 394px;">Classificação</th>
+                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending"
+                      style="width: 194px;">Proporcionalidade</th>
+                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending"
+                      style="width: 100px;">Grupo de atividade</th>
+                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending"
+                      style="width: 100px;">Ação</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr role="row" class="odd" style="cursor: pointer;" *ngFor="let rule of rules">
+                    <td class="sorting_1">{{rule.activity}}</td>
+                    <td>{{rule.classification}}</td>
+                    <td>{{rule.percentage}}%</td>
+                    <td>{{rule.name}}</td>
+                    <td>
+                      <span (click)="openModal(remove, rule.classification, false, rule.id)" style="font-size: 20px; text-align:center;" title="Excluir"><i class="fa fa-trash"></i></span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <!--
+          <div class="row">
+            <div class="col-sm-12 col-md-7">
+              <div class="dataTables_paginate paging_simple_numbers" id="dataTable_paginate">
+                <ul class="pagination">
+                  <li class="paginate_button page-item previous disabled" id="dataTable_previous">
+                    <a href="#" aria-controls="dataTable" data-dt-idx="0" tabindex="0" class="page-link">Anterior</a>
+                  </li>
+                  <li class="paginate_button page-item active">
+                    <a href="#" aria-controls="dataTable" data-dt-idx="1" tabindex="0" class="page-link">1</a>
+                  </li>
+                  <li class="paginate_button page-item ">
+                    <a href="#" aria-controls="dataTable" data-dt-idx="2" tabindex="0" class="page-link">2</a>
+                  </li>
+                  <li class="paginate_button page-item ">
+                    <a href="#" aria-controls="dataTable" data-dt-idx="3" tabindex="0" class="page-link">3</a>
+                  </li>
+                  <li class="paginate_button page-item next" id="dataTable_next">
+                    <a href="#" aria-controls="dataTable" data-dt-idx="7" tabindex="0" class="page-link">Próxima</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #create>
+      <div class="modal-header">
+        <h4 class="modal-title pull-left">Cadastrar Regra</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="success_modal" class="alert alert-success" role="alert">
+          {{success_modal}}
+        </div>
+        <div *ngIf="errors_modal" class="alert alert-danger" role="alert">
+          {{errors_modal}}
+        </div>
+        <form (ngSubmit)="createRules()">
+          <div class="form-group">
+            <label for="activity">Atividade</label>
+            <input type="text" class="form-control" id="activity" required="true" name="activity" [(ngModel)]="rule.activity">
+          </div>
+          <div class="form-group">
+            <label for="classification">Classificação</label>
+            <input type="text" class="form-control" id="classification" name="classification" [(ngModel)]="rule.classification">
+          </div>
+          <div class="form-row" style="margin-bottom: 1rem;">
+            <div class="col-md-6">
+              <label for="percentage">Porcentagem de Proporcionalidade</label>
+              <input class="form-control" id="percentage" type="number" name="percentage" [(ngModel)]="rule.percentage">
+            </div>
+            <div class="col-md-6">
+              <label for="max_hours">Atividade</label>
+              <select class="form-control" name="group" [(ngModel)]="rule.group">
+                <option *ngFor="let group of groups" [value]="group.id">{{group.name}}</option>
+              </select>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Enviar</button>
+        </form>
+      </div>
+    </ng-template>
+
+    <ng-template #remove>
+        <div class="modal-header">
+          <h4 class="modal-title pull-left">Remover Regra</h4>
+          <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div *ngIf="success_modal" class="alert alert-success" role="alert">
+            {{success_modal}}
+          </div>
+          <div *ngIf="errors_modal" class="alert alert-danger" role="alert">
+            {{errors_modal}}
+          </div>
+          <form (ngSubmit)="removeRule(id)">
+            <p>
+              Realmente deseja remover a regra de classificação {{classification}}?
+            </p>
+            <button type="submit" class="btn btn-danger">Remover</button>
+          </form>
+        </div>
+      </ng-template>

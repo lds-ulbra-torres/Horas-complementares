@@ -1,0 +1,109 @@
+<!-- Breadcrumbs-->
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">
+    <a href="#">Painel</a>
+  </li>
+  <li class="breadcrumb-item active">Regras</li>
+</ol>
+<div *ngIf="success" class="alert alert-success" role="alert">
+  {{success}}
+</div>
+<div *ngIf="errors" class="alert alert-danger" role="alert">
+  {{errors}}
+</div>
+<div class="card mb-3">
+    <div class="card-header">
+        <i class="fa fa-gavel"></i> </div>
+    <div class="card-body">
+      <div style="margin-bottom: 15px;">
+          <button (click)="openModal(create, null, true)" type="button" class="btn btn-primary">Cadastrar Atividade</button>
+      </div>
+      <div class="table-responsive">
+        <div id="dataTable_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
+          <div class="row">
+            <div class="col-sm-12 col-md-2">
+              <div class="dataTables_length" id="dataTable_length">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <table class="table table-bordered dataTable" id="dataTable" width="100%" cellspacing="0" role="grid" aria-describedby="dataTable_info"
+                style="width: 100%;">
+                <thead>
+                  <tr role="row">
+                    <th class="sorting_asc" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-sort="ascending"
+                      aria-label="Name: activate to sort column descending" style="width: 261px;">Atividade</th>
+                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending"
+                      style="width: 394px;">Limite de horas</th>
+                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending"
+                      style="width: 100px;">Ação</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr role="row" class="odd" style="cursor: pointer;" *ngFor="let group of groups">
+                    <td class="sorting_1">{{group.name}}</td>
+                    <td>{{group.max_hours}} horas</td>
+                    <td>
+                      <span (click)="openModal(remove, group.name, false, group.id)" style="font-size: 20px; text-align:center;" title="Excluir"><i class="fa fa-trash"></i></span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #create>
+      <div class="modal-header">
+        <h4 class="modal-title pull-left">Cadastrar Atividade</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="success_modal" class="alert alert-success" role="alert">
+          {{success_modal}}
+        </div>
+        <div *ngIf="errors_modal" class="alert alert-danger" role="alert">
+          {{errors_modal}}
+        </div>
+        <form (ngSubmit)="createGroup()">
+          <div class="form-group">
+            <label for="name">Atividade</label>
+            <input type="text" class="form-control" id="name" required="true" name="name" [(ngModel)]="group.name">
+          </div>
+          <div class="form-group">
+            <label for="max_hours">Limite de horas</label>
+            <input class="form-control" id="max_hours" type="number" name="max_hours" [(ngModel)]="group.max_hours">
+          </div>
+          <button type="submit" class="btn btn-primary">Enviar</button>
+        </form>
+      </div>
+    </ng-template>
+
+    <ng-template #remove>
+      <div class="modal-header">
+        <h4 class="modal-title pull-left">Remover Atividade</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="success_modal" class="alert alert-success" role="alert">
+          {{success_modal}}
+        </div>
+        <div *ngIf="errors_modal" class="alert alert-danger" role="alert">
+          {{errors_modal}}
+        </div>
+        <form (ngSubmit)="removeGroup(id)">
+          <p>
+            Realmente deseja remover a atividade {{name}}?
+          </p>
+          <button type="submit" class="btn btn-danger">Remover</button>
+        </form>
+      </div>
+    </ng-template>

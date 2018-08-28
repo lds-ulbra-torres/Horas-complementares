@@ -1,0 +1,108 @@
+<div *ngIf="success" class="alert alert-success" role="alert">
+  {{success}}
+</div>
+<div *ngIf="errors" class="alert alert-danger" role="alert">
+  {{errors}}
+</div>
+<!-- Navigation-->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="mainNav">
+  <a class="navbar-brand" style="color: white; cursor: pointer;">HS STADS</a>
+  <button (click)="toggleMenu()" class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+    aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarResponsive">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" style="color: white;" (click)="openModal(template)">
+          <i class="fa fa-share-square" style="margin-right: 5px;"></i>Enviar certificado</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" style="color: white;">
+          Olá {{user.name}}
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" (click)="logout()">
+          <i class="fa fa-fw fa-sign-out"></i>Sair</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+<div class="content-wrapper">
+  <div class="container-fluid">
+    <router-outlet></router-outlet>
+  </div>
+  <!-- /.container-fluid-->
+  <!-- /.content-wrapper-->
+</div>
+
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Enviar certificado</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div *ngIf="success_certificate" class="alert alert-success" role="alert">
+      {{success_certificate}}
+    </div>
+    <div *ngIf="errors_certificate" class="alert alert-danger" role="alert">
+      {{errors_certificate}}
+    </div>
+    <form [formGroup]="form" (ngSubmit)="createCertificate()" enctype="multipart/form-data">
+      <div class="form-group">
+        <label for="exampleInputFile">Arquivo</label>
+        <input type="file" class="form-control-file" id="certificate_file" (change)="onFileChange($event)" #fileInput>
+        <small id="fileHelp" class="form-text text-muted">Apenas arquivos de imagens ou pdf</small>
+      </div>
+      <div class="form-group">
+        <label for="event">Evento</label>
+        <input type="text" class="form-control" id="event" name="event" formControlName="event">
+      </div>
+      <div class="form-group">
+        <label for="institution">Instituição</label>
+        <input type="text" class="form-control" id="institution" name="institution" formControlName="institution">
+      </div>
+      <div class="form-row" style="margin-bottom: 1rem;">
+        <div class="col-md-6">
+          <label for="date_event">Data do evento</label>
+          <input class="form-control" id="date_event" type="date" name="date_event" formControlName="date_event">
+        </div>
+        <div class="col-md-6">
+          <label for="ch">Carga horaria (H)</label>
+          <input class="form-control" id="ch" type="number" name="ch" formControlName="ch">
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Enviar</button>
+    </form>
+  </div>
+</ng-template>
+
+<ng-template #completeRegister>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Completar cadastrado</h4>
+  </div>
+  <div class="modal-body">
+    <div *ngIf="success_certificate" class="alert alert-success" role="alert">
+      {{success_certificate}}
+    </div>
+    <div *ngIf="errors_certificate" class="alert alert-danger" role="alert">
+      {{errors_certificate}}
+    </div>
+    <form (ngSubmit)="register()">
+      <div class="form-row" style="margin-bottom: 1rem;">
+        <div class="col-md-6">
+          <label for="cgu">CGU</label>
+          <input class="form-control" id="cgu" type="number" name="cgu" [(ngModel)]="user.cgu">
+        </div>
+        <div class="col-md-6">
+          <label for="matricula">Matrícula</label>
+          <input class="form-control" id="matricula" type="text" name="matricula" [(ngModel)]="user.matricula" >
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Enviar</button>
+    </form>
+  </div>
+</ng-template>

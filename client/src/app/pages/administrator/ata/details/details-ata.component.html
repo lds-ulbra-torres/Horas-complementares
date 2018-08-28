@@ -1,0 +1,128 @@
+<!-- Breadcrumbs-->
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">
+    <a href="#">Painel</a>
+  </li>
+  <li class="breadcrumb-item">
+    <a href="#">Ata</a>
+  </li>
+  <li class="breadcrumb-item active">Detalhes</li>
+</ol>
+<div *ngIf="success" class="alert alert-success" role="alert">
+  {{success}}
+</div>
+<div *ngIf="errors" class="alert alert-danger" role="alert">
+  {{errors}}
+</div>
+<div class="card mb-3">
+  <div class="card-header">
+    <i class="fa fa-book"></i>
+    ATA {{ata.year}}/{{ata.semester}}
+  </div>
+  <div class="card-body">
+    Alunos:
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Nº</th>
+            <th>CÓDIGO</th>
+            <th>NOME</th>
+            <th>CARGA HORÁRIA COMPROVADA</th>
+            <th>STATUS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let s of students; let i = index">
+            <td>{{i + 1}}</td>
+            <td>{{s.matricula}}</td>
+            <td>{{s.name}}</td>
+            <td>{{s.hours}}</td>
+            <td>{{s.status}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!--
+    <button type="button" (click)="GeneratePDF()" class="btn btn-danger">Gerar PDF</button>
+    -->
+  </div>
+</div>
+
+<style type="text/css">
+  #pdf table {
+    width: 100%;
+  }
+
+  #header {
+    height: 150px;
+    clear: both;
+    background: #C0C0C0;
+    color: black;
+    font-weight: 700;
+  }
+
+  #header>div {
+    float: left;
+    display: table;
+    word-break: break-all;
+    margin: 0;
+    padding: 0;
+    background: #C0C0C0;
+    color: black;
+  }
+
+  #pdf_table td,
+  #pdf_table th {
+    border: 1px solid black;
+  }
+
+  #pdf_table th {
+    text-align: center;
+  }
+</style>
+<!--
+<div id="pdf" style="width: 595.28px">
+  <div id="header">
+    <div style="width: 68.7%">
+      <img src="http://localhost:8000/images/logo_ulbra_ata.png" style="max-width:100%;">
+      <div style="font-size: 10px;padding-left: 20px; padding-right: 20px; margin: 0; min-height: 60px; border-left: 1px solid black; border-right: 1px solid black;">
+        <p>ATIVIDADES COMPLEMENTARES DO CURSO SUPERIOR DE TECNOLOGIA EM ANÁLISE E DESENVOLVIMENTO DE SISTEMAS - CARGA HORÁRIA
+          MÍNIMA 34 HORAS</p>
+      </div>
+    </div>
+    <div style="width: 31.2%">
+      <div style="height: 108px; border-top:1px solid black; border-right:1px solid black; border-bottom:1px solid black; text-align:center;">
+        <p>ATA DE RESULTADOS FINAIS</p>
+      </div>
+      <div style="height: 60px; border-right:1px solid black; text-align:center">
+        Ano/semestre de conclusão
+        <br> 2017/2
+      </div>
+    </div>
+  </div>
+  <div style="min-width: 100%; clear:both;">
+    <table id="pdf_table">
+      <thead>
+        <tr>
+          <th>Nº</th>
+          <th>CÓDIGO</th>
+          <th style="text-align:left;">NOME DO ALUNO</th>
+          <th style="width: 150px;">CARGA HORÁRIA
+            <br>COMPROVADA</th>
+          <th style="width: 120px;">STATUS</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let s of students; let i = index">
+          <td style="text-align:center;">{{i + 1}}</td>
+          <td style="text-align:left;">{{s.matricula}}</td>
+          <td style="text-align:left;">{{s.name}}</td>
+          <td style="text-align:center;">{{s.hours}}</td>
+          <td style="text-align:center;">{{s.status}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+-->

@@ -1,0 +1,133 @@
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="#">Painel</a>
+    </li>
+    <li class="breadcrumb-item active"></li>
+  </ol>
+  <div class="row justify-content-center">
+    <div class="col-xl-3 col-sm-6 mb-3">
+      <div class="card text-white bg-primary o-hidden h-100">
+        <div class="card-body">
+          <div class="card-body-icon">
+            <i class="fa fa-hourglass-start"></i>
+          </div>
+          <div class="mr-5">Total de horas: {{total_hours}} </div>
+        </div>
+        <a (click)="openModal(detailsHours)" style="cursor: pointer;" class="card-footer text-white clearfix small z-1">
+          <span class="float-left">Ver mais</span>
+          <span class="float-right">
+            <i class="fa fa-angle-right"></i>
+          </span>
+        </a>
+      </div>
+    </div>
+    <div class="col-xl-3 col-sm-6 mb-3">
+      <div class="card text-white bg-warning o-hidden h-100">
+        <div class="card-body">
+          <div class="card-body-icon">
+            <i class="fa fa-certificate"></i>
+          </div>
+          <div class="mr-5" *ngIf="certificates_approves_count <= 0">Nenhum certificado aprovado</div>
+          <div class="mr-5" *ngIf="certificates_approves_count == 1">{{certificates_approves_count}} certificado aprovado</div>
+          <div class="mr-5" *ngIf="certificates_approves_count > 1">{{certificates_approves_count}} certificados aprovados</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card mb-3">
+    <div class="card-header">
+      <i class="fa fa-certificate"></i> Certificados</div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <div id="dataTable_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
+          <div class="row">
+            <div class="col-sm-12 col-md-2">
+              <div class="dataTables_length" id="dataTable_length">
+                  <select (change)="filter()" style="margin-bottom: 1em;" [(ngModel)]="status" name="status" aria-controls="dataTable" class="form-control form-control-sm">
+                    <option [value]="-1">Todos</option>
+                    <option [value]="0">Pendentes</option>
+                    <option [value]="1">Aprovados</option>
+                    <option [value]="2">Reprovados</option>
+                  </select>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <table class="table table-bordered dataTable" id="dataTable" width="100%" cellspacing="0" role="grid" aria-describedby="dataTable_info"
+                style="width: 100%;">
+                <thead>
+                  <tr role="row">
+                    <th class="sorting_asc" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-sort="ascending"
+                      aria-label="Name: activate to sort column descending" style="width: 261px;">Evento</th>
+                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending"
+                      style="width: 394px;">Instituição</th>
+                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending"
+                      style="width: 194px;">Data</th>
+                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending"
+                      style="width: 100px;">CH</th>
+                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending"
+                      style="width: 189px;">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr role="row" class="odd" style="cursor: pointer;" *ngFor="let certificate of certificates" (click)="toCertificate(certificate.id)">
+                    <td class="sorting_1">{{certificate.event}}</td>
+                    <td>{{certificate.institution}}</td>
+                    <td>{{certificate.date_event | date: 'dd/MM/yyyy'}}</td>
+                    <td>{{certificate.ch}}</td>
+                    <td *ngIf="certificate.status <= 0">Pendente</td>
+                    <td *ngIf="certificate.status == 1">Aprovado</td>
+                    <td *ngIf="certificate.status == 2">Reprovado</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="row" *ngIf="total_page > 1">
+            <div class="col-sm-12 col-md-7">
+              <div class="dataTables_paginate paging_simple_numbers" id="dataTable_paginate">
+                <ul class="pagination">
+                  <li class="paginate_button page-item previous " [ngClass]="{'disabled': current_page <= 1}" (click)="prev()" id="dataTable_previous">
+                    <a aria-controls="dataTable" data-dt-idx="0" tabindex="0" class="page-link">Anterior</a>
+                  </li>
+                  <li class="paginate_button page-item next" [ngClass]="{'disabled': current_page >= total_page}" id="dataTable_next" (click)="next()" >
+                    <a aria-controls="dataTable" data-dt-idx="7" tabindex="0" class="page-link">Próxima</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer small text-muted" *ngIf="certificates_count < 1">Nenhum certificado encontrado</div>
+    <div class="card-footer small text-muted" *ngIf="certificates_count == 1">{{certificates_count}} Certificado cadastrado</div>
+    <div class="card-footer small text-muted" *ngIf="certificates_count > 1">{{certificates_count}} Certificados cadastrados</div>
+  </div>
+
+  <ng-template #detailsHours>
+      <div class="modal-header">
+        <h4 class="modal-title pull-left">Horas acumuladas</h4>
+      </div>
+      <div class="modal-body">
+          <div class="row">
+              <div class="col-sm-12">
+                <dl>
+                  <dt>Falta: </dt>
+                  <dd *ngIf="(34 - total_hours) > 0">{{34 - total_hours}}</dd> 
+                  <dd *ngIf="(34 - total_hours) <= 0">0</dd>           
+                  <dt>Sobra: </dt>
+                  <dd *ngIf="(total_hours - 34) > 0">{{total_hours - 34}}</dd>  
+                  <dd *ngIf="(total_hours - 34) <= 0">0</dd>
+                  <dt>CH Aproveitada:</dt>
+                  <dd *ngIf="total_hours <= 34">{{total_hours}}</dd> 
+                  <dd *ngIf="total_hours > 34">34</dd>     
+                  <dt>CH Cursada: </dt>
+                  <dd>{{total_hours}}</dd>
+              </dl>
+              <span style="font-size: 12px;">Todos os dados são em horas</span>
+              </div>
+            </div>
+      </div>
+    </ng-template>
